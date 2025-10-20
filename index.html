@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>REPORTE DE MANTENIMIENTO DE EQUIPOS</title>
+  <style>
+    :root{
+      --bg:#f3f4f6; --card:#ffffff; --muted:#6b7280; --accent:#1f6feb; --border:#e5e7eb;
+      --radius:10px; --maxw:920px;
+    }
+    *{box-sizing:border-box}
+    body{font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:#111;margin:0;padding:18px;display:flex;justify-content:center}
+    .container{width:100%;max-width:var(--maxw);}
+    .header{display:flex;gap:14px;align-items:center;padding:16px;background:linear-gradient(90deg,#fff,#fafafa);border-radius:var(--radius);border:1px solid var(--border);margin-bottom:14px}
+    .logo{width:72px;height:72px;border-radius:12px;background:linear-gradient(135deg,#eef2ff,#dbeafe);display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:800;font-size:20px;box-shadow:0 2px 6px rgba(31,111,235,0.06)}
+    h1{font-size:18px;margin:0;color:#0f172a}
+    .sub{font-size:13px;color:var(--muted)}
+    form{display:block}
+    .card{background:var(--card);padding:12px 14px;border-radius:10px;margin-bottom:12px;border:1px solid var(--border);box-shadow:0 1px 2px rgba(16,24,40,0.02)}
+    label{display:block;margin-bottom:6px;font-weight:600;color:#0f172a;font-size:14px}
+    input[type="text"], input[type="date"], input[type="tel"], select, textarea, input[type="number"], input[type="email"]{width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;background:transparent;box-sizing:border-box;font-size:14px}
+    .row{display:flex;gap:10px}
+    .col{flex:1;min-width:0}
+    .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
+    button{padding:10px 14px;border-radius:8px;border:0;cursor:pointer;font-weight:600}
+    .btn-primary{background:var(--accent);color:white;box-shadow:0 6px 18px rgba(31,111,235,0.12)}
+    .btn-secondary{background:#eef6ff;color:var(--accent);border:1px solid rgba(31,111,235,0.08)}
+    .small{font-size:13px;color:var(--muted)}
+    .checkboxes{display:flex;flex-wrap:wrap;gap:8px}
+    .chip{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;background:#fbfdff;border:1px solid var(--border);font-size:13px}
+    .team{border:1px dashed var(--border);padding:10px;border-radius:10px;margin-bottom:10px;background:#ffffff}
+    .tasks{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+    .measure{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+    canvas{border:1px solid var(--border);border-radius:8px;background:white;touch-action:none;width:100%;height:140px}
+    .muted{color:var(--muted);font-size:13px}
+    .legend{font-size:13px;color:var(--muted);margin-bottom:8px}
+    @media (max-width:640px){ .row{flex-direction:column} .logo{width:56px;height:56px} }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo" aria-hidden="true">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 15.5A3.5 3.5 0 1 0 12 8.5a3.5 3.5 0 0 0 0 7z" fill="#1f6feb"/>
+          <path d="M19.4 13.5a7.9 7.9 0 0 0 0-3l2.1-1.6-2-3.4-2.6 1a8 8 0 0 0-2.6-1.5L13 1H11l-1.3 2.1a8 8 0 0 0-2.6 1.5l-2.6-1-2 3.4L4.6 10a7.9 7.9 0 0 0 0 3L2.5 15.6l2 3.4 2.6-1a8 8 0 0 0 2.6 1.5L11 23h2l1.3-2.1a8 8 0 0 0 2.6-1.5l2.6 1 2-3.4L19.4 13.5z" fill="#cfe2ff" opacity="0.9"/>
+        </svg>
+      </div>
+      <div>
+        <h1>REPORTE DE MANTENIMIENTO DE EQUIPOS</h1>
+        <div class="sub">Formulario para técnicos — Envío automático y PDF al cliente</div>
+      </div>
+    </div>
+
+    <form id="form" autocomplete="off">
+      <div class="card">
+        <label>Fecha del mantenimiento</label>
+        <input type="date" name="fecha" required>
+
+        <label style="margin-top:10px">Cliente</label>
+        <input type="text" name="cliente" required>
+
+        <div class="row" style="margin-top:10px">
+          <div class="col">
+            <label>Sede</label>
+            <input type="text" name="sede" required>
+          </div>
+          <div class="col">
+            <label>Dirección</label>
+            <input type="text" name="direccion">
+          </div>
+        </div>
+
+        <label style="margin-top:10px">Teléfono</label>
+        <input type="tel" name="telefono" placeholder="+57 300 0000000">
+      </div>
+
+      <div class="card">
+        <label>Elementos de Protección Personal (marque los utilizados)</label>
+        <div class="checkboxes" id="epp">
+          <label class="chip"><input type="checkbox" name="epp" value="Guantes"> Guantes</label>
+          <label class="chip"><input type="checkbox" name="epp" value="Gafas"> Gafas</label>
+          <label class="chip"><input type="checkbox" name="epp" value="Casco"> Casco</label>
+          <label class="chip"><input type="checkbox" name="epp" value="Botas"> Botas</label>
+          <label class="chip"><input type="checkbox" name="epp" value="Tapaoidos"> Tapaoídos</label>
+          <label class="chip"><input type="checkbox" name="epp" value="Tapabocas"> Tapabocas</label>
+        </div>
+
+        <label style="margin-top:10px">Se verificó instructivo para lámparas UV</label>
+        <div class="row" style="margin-top:6px">
+          <label class="chip"><input type="radio" name="uv" value="Aplica" required> Aplica</label>
+          <label class="chip"><input type="radio" name="uv" value="No aplica"> No aplica</label>
+        </div>
+        
+      </div>
+
+      <div class="card">
+        <label>Tipo de mantenimiento</label>
+        <div class="row" style="margin-top:6px">
+          <label class="chip"><input type="radio" name="tipo_mantenimiento" value="Preventivo" required> Preventivo</label>
+          <label class="chip"><input type="radio" name="tipo_mantenimiento" value="Correctivo"> Correctivo</label>
+        </div>
+      </div>
+
+      <div class="card">
+        <label>Equipos</label>
+        <div id="teams"></div>
+        <div class="actions" style="margin-top:6px">
+          <button type="button" id="addTeam" class="btn-secondary">➕ Agregar equipo</button>
+        </div>
+        <div class="small" style="margin-top:8px">Agrega uno o varios equipos. Para cada equipo selecciona el tipo (Condensadora o Evaporadora/Manejadora).</div>
+      </div>
+
+      <div class="card">
+        <label>Observaciones / Recomendaciones</label>
+        <textarea name="observaciones" rows="4" placeholder="Descripción breve de hallazgos o recomendaciones..."></textarea>
+        <div class="muted" style="margin-top:8px">NO usar caracteres especiales ni saltos de línea largos.</div>
+      </div>
+
+      <div class="card">
+        <label>Correo del cliente (para enviar PDF)</label>
+        <input type="email" name="correo_cliente" placeholder="cliente@empresa.com" required>
+
+        <label style="margin-top:10px">Nombre del técnico responsable</label>
+        <input type="text" name="nombre_tecnico" required>
+        
+        <label style="margin-top:10px">Nombre y cargo de quien recibe/aprueba (Cliente)</label>
+        <input type="text" name="nombre_cliente" required>
+      </div>
+
+      <div class="card">
+        <label>Firma del técnico (dibujar con dedo o mouse)</label>
+        <canvas id="firmaTecnicoCanvas"></canvas>
+        <div class="actions" style="margin-top:8px">
+          <button type="button" id="clearSigTec" class="btn-secondary">Limpiar firma</button>
+        </div>
+      </div>
+      
+      <div class="card">
+        <label>Firma de aprobación del cliente (dibujar con dedo o mouse)</label>
+        <canvas id="firmaClienteCanvas"></canvas>
+        <div class="actions" style="margin-top:8px">
+          <button type="button" id="clearSigCli" class="btn-secondary">Limpiar firma</button>
+        </div>
+        <div class="muted" style="margin-top:8px">Ambas firmas se guardan en Drive y se adjuntan al PDF.</div>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn-primary">Enviar reporte</button>
+      </div>
+    </form>
+  </div>
+
+<script>
+// ============================================================
+// LÓGICA DEL FORMULARIO Y ENVÍO
+// ============================================================
+
+// Utilidad para crear elementos
+function createEl(tag, attrs={}, children=[]) {
+  const el = document.createElement(tag);
+  for (const k in attrs) {
+    if (k === 'class') el.className = attrs[k];
+    else if (k === 'text') el.textContent = attrs[k];
+    else el.setAttribute(k, attrs[k]);
+  }
+  children.forEach(c => el.appendChild(c));
+  return el;
+}
+
+let teamCount = 0;
+const maxTeams = 10;
+const teamsDiv = document.getElementById('teams');
+document.getElementById('addTeam').addEventListener('click', ()=> addTeam());
+
+function addTeam() {
+  if (teamCount >= maxTeams) { alert('Máximo de equipos alcanzado ('+maxTeams+')'); return; }
+  teamCount++;
+  const id = teamCount;
+  const card = createEl('div', {class:'team', id:'team-'+id});
+  const header = createEl('div', {class:'row'});
+  const col1 = createEl('div', {class:'col'});
+  const col2 = createEl('div', {class:'col'});
+  col1.appendChild(createEl('label',{text:'Tipo de equipo'}));
+  const tipo = createEl('select',{name:'tipo_equipo_'+id});
+  tipo.innerHTML = '<option value="Condensadora">Condensadora</option><option value="Evaporadora/Manejadora">Evaporadora/Manejadora</option>';
+  col1.appendChild(tipo);
+  col2.appendChild(createEl('label',{text:'Ubicación'}));
+  col2.appendChild(createEl('input',{type:'text', name:'ubicacion_'+id, placeholder:'Sala/Local/Altura'}));
+  header.appendChild(col1); header.appendChild(col2);
+  card.appendChild(header);
+
+  const tasksDiv = createEl('div',{class:'tasks', id:'tasks_'+id});
+  card.appendChild(tasksDiv);
+  const measDiv = createEl('div',{class:'measure', id:'meas_'+id});
+  card.appendChild(measDiv);
+
+  const rem = createEl('div',{class:'actions'});
+  const remBtn = createEl('button',{type:'button',class:'btn-secondary', text:'🗑️ Eliminar equipo'});
+  remBtn.addEventListener('click', ()=> { card.remove(); teamCount--; });
+  rem.appendChild(remBtn);
+  card.appendChild(rem);
+
+  teamsDiv.appendChild(card);
+
+  function populateForType(value) {
+    tasksDiv.innerHTML = ''; measDiv.innerHTML = '';
+    if (value === 'Condensadora') {
+      tasksDiv.appendChild(createEl('label',{text:'Tareas realizadas (Condensadora)'}));
+      const items = [
+        "Lavado serpentín con producto químico",
+        "Lavado de tapas y bandejas",
+        "Limpieza tablero, compresor, ventiladores",
+        "Revisión, vibraciones, bases, soportes",
+        "Corrección fugas aceite, gas refrigerante",
+        "Revisión y/o cambio de rodamientos",
+        "Revisión y/o cambio de chumaceras",
+        "Revisión de balanceo y lubricación de ventilador",
+        "Revisión y/o cambio de aislamiento térmico",
+        "Mantenimiento eléctrico, cableado, bornes",
+        "Mantenimiento y calibración de controles",
+        "Mantenimiento al chasis",
+        "Pintura anticorrosivo, tornillería",
+        "Ajuste carga de gas, puesta a punto",
+        "Revisión tuberías refrigeración. aislamiento"
+      ];
+      items.forEach((it)=>{
+        const lbl = createEl('label',{class:'chip'});
+        const cb = createEl('input',{type:'checkbox', name:'task_'+id, value:it}); 
+        lbl.appendChild(cb); lbl.appendChild(document.createTextNode(' '+it));
+        tasksDiv.appendChild(lbl);
+      });
+
+      measDiv.appendChild(createEl('label',{text:'Mediciones (Condensadora)'}));
+      const measures = [
+        "Toma presión gas baja",
+        "Toma presión gas alta",
+        "Consumo amperios compresor L1",
+        "Consumo amperios compresor L2",
+        "Consumo amperios compresor L3",
+        "Consumo Placa Compresor (RLA)",
+        "L1L2 Voltaje de suministro",
+        "L2L3 Voltaje de suministro",
+        "L1L3 Voltaje de suministro",
+        "Consumo eléctrico motor ventilador",
+        "Amperaje Placa motor ventilador (FLA)"
+      ];
+      measures.forEach(m=>{
+        const la = createEl('label',{text:m});
+        const inp = createEl('input',{type:'text', name:'meas_'+id+'_'+m, placeholder:''}); 
+        measDiv.appendChild(la); measDiv.appendChild(inp);
+      });
+    } else {
+      tasksDiv.appendChild(createEl('label',{text:'Tareas realizadas (Evaporadora/Manejadora)'}));
+      const items = [
+        "Lavado de serpentines",
+        "Lavado de filtros",
+        "Desincrustación con producto químico",
+        "Reparación de ductos",
+        "Limpieza de rejillas",
+        "Revisión de transmisiones alineación",
+        "Revisión y/o balanceo de ventiladores",
+        "Revisión y/o cambio de rodamientos",
+        "Lubricación de motores",
+        "Limpieza de drenajes y bandejas"
+      ];
+      items.forEach(it=>{
+        const lbl = createEl('label',{class:'chip'});
+        const cb = createEl('input',{type:'checkbox', name:'task_'+id, value:it});
+        lbl.appendChild(cb); lbl.appendChild(document.createTextNode(' '+it));
+        tasksDiv.appendChild(lbl);
+      });
+
+      measDiv.appendChild(createEl('label',{text:'Mediciones (Evaporadora/Manejadora)'}));
+      const measures = [
+        "Temperatura sala / Set Point",
+        "Consumo eléctrico motor ventilador",
+        "Amperaje Placa motor ventilador (FLA)",
+        "Revisión de glicerina",
+        "Es necesario el cambio de glicerina en las neveras"
+      ];
+      measures.forEach(m=>{
+        const la = createEl('label',{text:m});
+        if (m.includes("Revisión") || m.includes("Es necesario")) {
+          const sel = createEl('select',{name:'meas_'+id+'_'+m}); 
+          sel.innerHTML = '<option value="Sí">Sí</option><option value="No">No</option>';
+          measDiv.appendChild(la); measDiv.appendChild(sel);
+        } else {
+          const inp = createEl('input',{type:'text', name:'meas_'+id+'_'+m}); 
+          measDiv.appendChild(la); measDiv.appendChild(inp);
+        }
+      });
+    }
+  }
+
+  populateForType('Condensadora');
+  tipo.addEventListener('change', ()=> populateForType(tipo.value));
+}
+
+// ============================================================
+// LÓGICA DE FIRMAS (Canvas)
+// ============================================================
+
+// Función de configuración de Canvas (Para no repetir código)
+function setupCanvas(canvas, ctx, clearButton) {
+  let drawing = false;
+  let last = {x:0,y:0};
+
+  function resizeCanvas() {
+    const ratio = window.devicePixelRatio || 1;
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
+    canvas.width = w * ratio;
+    canvas.height = h * ratio;
+    ctx.setTransform(ratio,0,0,ratio,0,0);
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = '#0b1226';
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  function getPos(e){
+    const rect = canvas.getBoundingClientRect();
+    if (e.touches) { e = e.touches[0]; }
+    return {x: e.clientX - rect.left, y: e.clientY - rect.top};
+  }
+  
+  canvas.addEventListener('pointerdown', e=>{ drawing=true; last=getPos(e); });
+  canvas.addEventListener('pointerup', e=>{ drawing=false; ctx.beginPath(); });
+  canvas.addEventListener('pointermove', e=>{
+    if (!drawing) return;
+    const p = getPos(e);
+    ctx.beginPath();
+    ctx.moveTo(last.x,last.y);
+    ctx.lineTo(p.x,p.y);
+    ctx.stroke();
+    last = p;
+  });
+  
+  clearButton.addEventListener('click', ()=>{
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    resizeCanvas();
+  });
+}
+
+// Firma del Técnico
+const canvasTec = document.getElementById('firmaTecnicoCanvas');
+const ctxTec = canvasTec.getContext('2d');
+setupCanvas(canvasTec, ctxTec, document.getElementById('clearSigTec'));
+
+// Firma del Cliente
+const canvasCli = document.getElementById('firmaClienteCanvas');
+const ctxCli = canvasCli.getContext('2d');
+setupCanvas(canvasCli, ctxCli, document.getElementById('clearSigCli'));
+
+// Envío del formulario - AHORA COMO FORM-DATA (Simple Request) para evitar CORS
+document.getElementById('form').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const form = e.target;
+  const fd = new FormData(form);
+  
+  // Usamos URLSearchParams para construir el body como 'x-www-form-urlencoded'
+  const params = new URLSearchParams();
+  
+  // 1. Procesar campos normales (simples)
+  for (const [key, value] of fd.entries()) {
+    // Excluir campos que se procesan aparte (arrays y firmas)
+    if (key === 'epp' || key.startsWith('task_') || key.startsWith('meas_')) {
+      continue; 
+    }
+    params.append(key, value);
+  }
+  
+  // 2. Procesar firmas (Base64)
+  params.append('firma_tecnico', canvasTec.toDataURL('image/png'));
+  params.append('firma_cliente', canvasCli.toDataURL('image/png'));
+  
+  // 3. Procesar EPP (permite múltiples valores)
+  fd.getAll('epp').forEach(v => params.append('epp', v));
+  
+  // 4. Procesar la estructura compleja de EQUIPOS (se serializa a JSON string)
+  const equipos = [];
+  for (let i=1;i<=maxTeams;i++){
+    const el = document.getElementById('team-'+i);
+    if (!el) continue;
+    
+    const tipo = el.querySelector('select').value;
+    const ubic = el.querySelector('input[type="text"]').value;
+    const tasks = [];
+    el.querySelectorAll('input[type="checkbox"][name="task_'+i+'"]').forEach(cb=>{ if(cb.checked) tasks.push(cb.value); });
+    const meas = {};
+    el.querySelectorAll('[name^="meas_'+i+'_"]').forEach(inp=>{
+      const val = inp.tagName === 'SELECT' ? inp.value : inp.value || ''; 
+      meas[inp.name.replace('meas_'+i+'_','')] = val;
+    });
+    
+    equipos.push({tipo, ubicacion:ubic, tareas:tasks, mediciones:meas});
+  }
+  
+  // CLAVE: Añadir el objeto EQUIPOS serializado a los parámetros
+  params.append('equipos', JSON.stringify(equipos));
+  
+  // ⚠️ URL ACTUALIZADA CON TU NUEVA IMPLEMENTACIÓN
+  const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyngHIv7d3pHuAn1TRZ24kPaV66Vi6ArrnDH55sMMCr1CsJ15QZoSDQ3k1810pbkgp8/exec'; 
+
+  try {
+    const resp = await fetch(WEB_APP_URL, {
+      method:'POST',
+      // CLAVE: Enviamos como form-urlencoded para evitar la petición OPTIONS/CORS
+      headers: {'Content-Type':'application/x-www-form-urlencoded'}, 
+      body: params.toString() // Enviamos los parámetros serializados
+    });
+    
+    // Manejo de la respuesta del Apps Script (ESPERAMOS JSON)
+    const result = await resp.json(); 
+    
+    if (result.status === 'ok') {
+        alert('Reporte enviado correctamente. ' + result.result);
+        form.reset();
+        ctxTec.clearRect(0,0,canvasTec.width,canvasTec.height);
+        ctxCli.clearRect(0,0,canvasCli.width,canvasCli.height);
+    } else {
+        throw new Error(result.error || 'Error desconocido');
+    }
+  } catch (err) {
+    // Si ocurre el error "Unexpected token", el problema es que el script devolvió HTML y no JSON.
+    // Esto significa que la URL de ejecución aún no es válida, la implementación falló, o Google la bloquea.
+    alert('Error al enviar: ' + err.message + '. Posibles causas: URL incorrecta, implementación fallida, o caché de Google.');
+    console.error(err);
+  }
+});
+</script>
+</body>
+</html>
